@@ -1,0 +1,4 @@
+# /etc/udev/rules.d/99-roccat-kone-aimo.rules
+# you might need to adjust the path below to whatever you want to start when plugged in.
+SUBSYSTEM=="usb",ACTION=="add",ATTRS{idVendor}=="1e7d", ATTRS{idProduct}=="2e27", GROUP="plugdev", MODE="660", SYMLINK+="roccat_kone_aimo%n",TAG+="uaccess", TAG+="udev-acl", RUN+="/bin/bash -c '/usr/local/bin/aimo.py 2>&1 > /tmp/kone_aimo.log 2>&1'"
+KERNEL=="hidraw*", ATTRS{idVendor}=="1e7d", ATTRS{idProduct}=="2e27", MODE="0660", GROUP="plugdev", TAG+="uaccess", TAG+="udev-acl"
