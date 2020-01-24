@@ -14,3 +14,6 @@ It only works with the hidraw driver.
 The python script works, but cannot used to animate leds under linux.
 
 For more infos read the sources.
+
+
+USB Captures provided by Metaln00b.
