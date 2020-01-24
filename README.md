@@ -11,7 +11,10 @@ Or just to disable the leds (Set all to 0).
 It only works with the hidraw driver on linux.  
 <br/>
 <br/>
-The python script works, but cannot be used to animate leds under linux, because libusb cannot do that.
+The python script works, but cannot be used to animate leds under linux, because libusb cannot do that.  
+<br/>
+<br/>
+
 For more infos read the sources. 
 <br/>
 <br/>
