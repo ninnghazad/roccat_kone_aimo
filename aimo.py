@@ -40,6 +40,7 @@ import time
 import sys
 import math
 import random
+import binascii
 
 RED=0
 GREEN=1
@@ -66,7 +67,7 @@ def colors_to_msg(colors):
         # add padding, device expects 46 bytes.
         msg = msg.ljust(46,'0')
         # return as binary data
-        return msg.decode("hex")
+        return binascii.unhexlify(msg)
 
 def set_colors(colors):
         msg = colors_to_msg(colors)
@@ -107,7 +108,7 @@ def init():
         # print("INIT:",result)
 
         # send some magic init msg, just like swarm-software does
-        data = "0E06010100FF".decode("hex")
+        data = binascii.unhexlify("0E06010100FF")
         result=dev.ctrl_transfer(0x21, 0x9, wValue=0x030E, wIndex=0x00, data_or_wLength=data)
         result=dev.ctrl_transfer(0x21, 0x9, wValue=0x030E, wIndex=0x00, data_or_wLength=data)
 
