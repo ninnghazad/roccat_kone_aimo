@@ -4,7 +4,7 @@ A few bits of code to set RGB leds on a Rocca Kone Aimo mouse.
 Meant for linux, the python scripts might work on windows.  
 <br/>
 <br/>
-The cpp tool is recommended, it's fast enough to be used in scripts for nice led animations.
+The cpp tool `roccat_kone_aimo_rgb_tool.cpp` is recommended, it's fast enough to be used in scripts for nice led animations.
 
 Or just to disable the leds (Set all to 0).
 
