@@ -4,16 +4,20 @@ A few bits of code to set RGB leds on a Rocca Kone Aimo mouse.
 Meant for linux, the python scripts might work on windows.  
 <br/>
 <br/>
-The cpp tool is recommended, it's fast enough to be used in scripts for nice animations.
+The cpp tool is recommended, it's fast enough to be used in scripts for nice led animations.
 
 Or just to disable the leds (Set all to 0).
 
-It only works with the hidraw driver on linux. 
+It only works with the hidraw driver on linux.
+<br/>
+Build and usage instructions can be found in the source file. 
+
+<br/>
 
 `aimo_animate_example.py` is meant to be used with the cpp tool to make animations.
 <br/>
 <br/>
-The python script works, but cannot be used to animate leds under linux, because libusb cannot do that.  
+`aimo.py` can set colors on its own, but cannot be used to animate leds under linux, because libusb cannot do that.  
 <br/>
 <br/>
 
