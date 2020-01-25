@@ -55,8 +55,8 @@ def set_colors(colors):
 
 if __name__ == "__main__":
 	# something a little more fancy, for this, the script has to run in a loop to update the colors:
-	#    - slowly pulse the red component of the two 8 "stripe" leds on the back.
-	#    - slowly pulse the red component of the two 2 "side", but at a different speed.
+	#    - slowly pulse the red component of the "stripe" leds on the back.
+	#    - slowly pulse the red component of the "side", but at a different speed.
 	#    - slowly pulse the red component of the wheel, but at yet another different speed.
 
 	while(True):
