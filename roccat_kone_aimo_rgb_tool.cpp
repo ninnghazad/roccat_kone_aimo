@@ -62,10 +62,26 @@ void set_feature_report(int fd,const uint8_t * msg,size_t len) {
 	}
 }
 
+bool is_device_supported(const hidraw_devinfo &info)
+{
+	// Based on https://pcilookup.com/?ven=1e7d&dev=&action=submit
+	// PCI devices above product ID 0x2e7d are keyboards
+	// Tested: Kone Aimo, Kone Pure Ultra
+
+	if (info.bustype != BUS_USB && info.bustype != BUS_BLUETOOTH)
+		return false;
+
+	if (info.vendor != 0x1e7d)
+		return false; // Not ROCCAT
+
+	return (info.product >= 0x2db4 && info.product <= 0x2e27); // known "Kone *" mice
+}
+
 int main(int argc, char **argv)
 {
 	if(argc < 35) {
-		std::cout << "specify first the path to hidraw* device, then all 11 rgb triplets as commandline parameter, as hex value." << std::endl;
+		std::cout << "specify first the path to hidraw* device, then all 11 "
+			"rgb triplets as commandline parameter, as hex value." << std::endl;
 		return 1;
 	}
 
@@ -79,29 +95,26 @@ int main(int argc, char **argv)
 	auto res = ioctl(fd, HIDIOCGRAWINFO, &info);
 	if (res < 0) {
 		perror("HIDIOCGRAWINFO");
-	} else {
-		if(info.vendor != 0x1e27 && info.product != 0x2e27) {
-			std::array<uint8_t,256> buf;
+	} else if (!is_device_supported(info)) {
+		std::array<uint8_t,256> buf;
 
+		std::cerr << "ERROR: This is not a Roccat Kone Aimo device." << std::endl;
+		res = ioctl(fd, HIDIOCGRAWNAME(256), &buf[0]);
+		if (res < 0)
+			perror("HIDIOCGRAWNAME");
+		else
+			printf("Raw Name: %s\n", &buf[0]);
 
-			std::cerr << "ERROR: This is not a Roccat Kone Aimo device." << std::endl;
-			res = ioctl(fd, HIDIOCGRAWNAME(256), &buf[0]);
-			if (res < 0)
-				perror("HIDIOCGRAWNAME");
-			else
-				printf("Raw Name: %s\n", &buf[0]);
-
-			res = ioctl(fd, HIDIOCGRAWPHYS(256), &buf[0]);
-			if (res < 0)
-				perror("HIDIOCGRAWPHYS");
-			else
-				printf("Raw Phys: %s\n", &buf[0]);
-			printf("Raw Info:\n");
-			printf("\tbustype: %d (%s)\n",
-				info.bustype, bus_str(info.bustype));
-			printf("\tvendor: 0x%04hx\n", info.vendor);
-			printf("\tproduct: 0x%04hx\n", info.product);
-		}
+		res = ioctl(fd, HIDIOCGRAWPHYS(256), &buf[0]);
+		if (res < 0)
+			perror("HIDIOCGRAWPHYS");
+		else
+			printf("Raw Phys: %s\n", &buf[0]);
+		printf("Raw Info:\n");
+		printf("\tbustype: %d (%s)\n",
+			info.bustype, bus_str(info.bustype));
+		printf("\tvendor: 0x%04hx\n", info.vendor);
+		printf("\tproduct: 0x%04hx\n", info.product);
 	}
 
 	get_feature_report(fd);
@@ -132,18 +145,13 @@ bus_str(int bus)
 	switch (bus) {
 	case BUS_USB:
 		return "USB";
-		break;
 	case BUS_HIL:
 		return "HIL";
-		break;
 	case BUS_BLUETOOTH:
 		return "Bluetooth";
-		break;
 	case BUS_VIRTUAL:
 		return "Virtual";
-		break;
 	default:
 		return "Other";
-		break;
 	}
 }
